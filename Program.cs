@@ -10,101 +10,111 @@ namespace WatermarkImages
     {
         static void Main(string[] args)
         {
-            // args = new string[] { "/Users/ra/Downloads/demo/fotos", "/Users/ra/Downloads/demo/vadeball-logo.jpg", "center", "20", "100" };
-
-            if (args.Length == 0)
-            {
-                Console.WriteLine("Select directory and watermark file to use:" +
-                    "\n  => mono WathermarkImages.exe FOTOS_DIR FILE_WATERMAKR POSITION SIZE MARGIN" +
-                    "\n\n" +
-                    "Help:" +
-                    "\n * POSITION => Center, TopLeft, TopCenter, TopRight, BottomLeft, BottomCenter, BottomRight" +
-                    "\n * SIZE => 10 to 70" +
-                    "\n * MARGIN => pixel to margen laterial. Only form Left and Right postions." +
-                    "\n\n");
-            }
-
-            var path = "";
-            if (args.Length > 0)
-                path = args[0];
-            else
-            {
-                Console.WriteLine("Select the directory: ");
-                path = Console.ReadLine();
-            }
-
-            var fileWatermark = "";
-            if (args.Length > 1)
-            {
-                fileWatermark = args[1];
-            }
-            else
-            {
-                Console.WriteLine("Select Watermark file: ");
-                fileWatermark = Console.ReadLine();
-            }
-
-            var position = "center";
-
-            if (args.Length > 2)
-                position = args[2].ToLower();
-            else
-            {
-                Console.WriteLine("What postion (center,topleft,topcenter,topright,bottomleft,bottomcenter,bottomright)? ");
-                position = Console.ReadLine();
-            }
-
-            var size = 0;
+            //args = new string[] { "/Users/ra/Downloads/demo/fotos", "/Users/ra/Downloads/demo/vadeball-logo.jpg", "center", "20", "100" };
+            // /Users/ra/Downloads/demo/fotos /Users/ra/Downloads/demo/vadeball-logo.jpg center 20 100
             try
             {
-                if (args.Length > 3)
-                    size = Convert.ToInt32(args[3]);
+                if (args.Length == 0)
+                {
+                    Console.WriteLine("Select directory and watermark file to use:" +
+                        "\n  => mono WathermarkImages.exe FOTOS_DIR FILE_WATERMAKR POSITION SIZE MARGIN" +
+                        "\n\n" +
+                        "Help:" +
+                        "\n * POSITION => Center, TopLeft, TopCenter, TopRight, BottomLeft, BottomCenter, BottomRight" +
+                        "\n * SIZE => 10 to 70" +
+                        "\n * MARGIN => pixel to margen laterial. Only form Left and Right postions." +
+                        "\n\n");
+                }
+
+                var path = "";
+                if (args.Length > 0)
+                {
+                    path = args[0];
+                    Console.WriteLine("Directory: " + args[0]);
+                }
                 else
                 {
-                    Console.WriteLine("Select a size in % from 10 to 70: ");
-                    size = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Select the directory: ");
+                    path = Console.ReadLine();
                 }
-            }
-            catch //(Exception ex)
-            {
-                Console.WriteLine("Check Size value.");
-            }
 
-
-            var margin = 0;
-            try
-            {
-                if (args.Length > 4)
-                    margin = Convert.ToInt32(args[4]);
+                var fileWatermark = "";
+                if (args.Length > 1)
+                {
+                    fileWatermark = args[1];
+                }
                 else
                 {
-                    Console.WriteLine("Select a margin, 0 by defatul: ");
-                    size = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Select Watermark file: ");
+                    fileWatermark = Console.ReadLine();
                 }
-            }
-            catch //(Exception ex)
-            {
-                Console.WriteLine("Check Margin value.");
-            }
 
-            var files = Directory.GetFiles(path);
-            if (files.Length == 0)
-            {
-                Console.WriteLine("This folther don't have images.");
-            }
-            else
-            {
-                Console.WriteLine("Total fotos to process: " + files.Length);
-                /*  Console.WriteLine("Write 'y' to continue. ");
-                  if (Console.ReadLine() != "y")
-                  {
-                      return;
-                  }*/
-            }
-            var watermark = new Bitmap(Image.FromFile(fileWatermark));
+                var position = "center";
 
-            for (var f = 0; f < files.Length; f++)
-                WatermarkAdd(files[f], watermark, position, size, margin);
+                if (args.Length > 2)
+                    position = args[2].ToLower();
+                else
+                {
+                    Console.WriteLine("What postion (center,topleft,topcenter,topright,bottomleft,bottomcenter,bottomright)? ");
+                    position = Console.ReadLine();
+                }
+
+                var size = 0;
+                try
+                {
+                    if (args.Length > 3)
+                        size = Convert.ToInt32(args[3]);
+                    else
+                    {
+                        Console.WriteLine("Select a size in % from 10 to 70: ");
+                        size = Convert.ToInt32(Console.ReadLine());
+                    }
+                }
+                catch //(Exception ex)
+                {
+                    Console.WriteLine("Check Size value.");
+                }
+
+
+                var margin = 0;
+                try
+                {
+                    if (args.Length > 4)
+                        margin = Convert.ToInt32(args[4]);
+                    else
+                    {
+                        Console.WriteLine("Select a margin, 0 by defatul: ");
+                        size = Convert.ToInt32(Console.ReadLine());
+                    }
+                }
+                catch //(Exception ex)
+                {
+                    Console.WriteLine("Check Margin value.");
+                }
+
+                var files = Directory.GetFiles(path);
+                if (files.Length == 0)
+                {
+                    Console.WriteLine("This folther don't have images.");
+                }
+                else
+                {
+                    Console.WriteLine("Total fotos to process: " + files.Length);
+                    /*  Console.WriteLine("Write 'y' to continue. ");
+                      if (Console.ReadLine() != "y")
+                      {
+                          return;
+                      }*/
+                }
+                var watermark = new Bitmap(Image.FromFile(fileWatermark));
+
+                for (var f = 0; f < files.Length; f++)
+                    WatermarkAdd(files[f], watermark, position, size, margin);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+            }
         }
 
         private static void WatermarkAdd(string file, Bitmap watermark, string position, int size, int margin)
