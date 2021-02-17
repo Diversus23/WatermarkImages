@@ -10,18 +10,18 @@ namespace WatermarkImages
     {
         static void Main(string[] args)
         {
-            //args = new string[] { "/Users/ra/Downloads/demo/fotos", "/Users/ra/Downloads/demo/vadeball-logo.jpg", "center", "20", "100" };
+            // args = new string[] { "../../test", "../../water_small.png", "center", "100", "100" };
             // /Users/ra/Downloads/demo/fotos /Users/ra/Downloads/demo/vadeball-logo.jpg center 20 100
             try
             {
                 if (args.Length == 0)
                 {
                     Console.WriteLine("Select directory and watermark file to use:" +
-                        "\n  => mono WathermarkImages.exe FOTOS_DIR FILE_WATERMAKR POSITION SIZE MARGIN" +
+                        "\n  => WathermarkImages.exe FOTOS_DIR FILE_WATERMAKR POSITION SIZE MARGIN" +
                         "\n\n" +
                         "Help:" +
                         "\n * POSITION => Center, TopLeft, TopCenter, TopRight, BottomLeft, BottomCenter, BottomRight" +
-                        "\n * SIZE => 10 to 70" +
+                        "\n * SIZE WATERMARK IN PERCENT => 1 to 1000 (100 watermark full size)" +
                         "\n * MARGIN => pixel to margen laterial. Only form Left and Right postions." +
                         "\n\n");
                 }
@@ -66,7 +66,7 @@ namespace WatermarkImages
                         size = Convert.ToInt32(args[3]);
                     else
                     {
-                        Console.WriteLine("Select a size in % from 10 to 70: ");
+                        Console.WriteLine("Select a size watermark in % from 1 to 10000: ");
                         size = Convert.ToInt32(Console.ReadLine());
                     }
                 }
@@ -124,67 +124,67 @@ namespace WatermarkImages
 
             var imagen = Image.FromFile(file);
 
-            if (size < 10)
-                size = 10;
-            if (size > 70)
-                size = 70;
-
             var w = 0;
             var h = 0;
+
+            if (size < 0)
+                size = 0;
+            if (size > 1000)
+                size = 1000;
 
             switch (position)
             {
                 default:
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, (imagen.Width - w) / 2, (imagen.Height - h) / 2, w, h);
                     }
                     break;
                 case "topleft":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        gr.DrawImage(watermark, x + margin, y + margin, imagen.Width * size / 100, imagen.Height * size / 100);
+                        gr.DrawImage(watermark, x + margin, y + margin, watermark.Width * size / 100, watermark.Height * size / 100);
                     }
                     break;
                 case "topcenter":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, (imagen.Width - w) / 2, y + margin, w, h);
                     }
                     break;
                 case "topright":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, imagen.Width - w - margin, y + margin, w, h);
                     }
                     break;
                 case "bottomleft":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, x + margin, imagen.Height - h - margin, w, h);
                     }
                     break;
                 case "bottomcenter":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, (imagen.Width - w) / 2, imagen.Height - h - margin, w, h);
                     }
                     break;
                 case "bottomright":
                     using (Graphics gr = Graphics.FromImage(imagen))
                     {
-                        w = imagen.Width * size / 100;
-                        h = imagen.Height * size / 100;
+                        w = watermark.Width * size / 100;
+                        h = watermark.Height * size / 100;
                         gr.DrawImage(watermark, imagen.Width - w - margin, imagen.Height - h - margin, w, h);
                     }
                     break;
